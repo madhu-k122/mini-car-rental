@@ -9,21 +9,27 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('u_code', 20)->unique()->index();
-            $table->string('u_name', 100);
-            $table->string('u_email', 100)->unique()->index();
-            $table->timestamp('u_email_verified_at')->nullable();
-            $table->string('u_password');
-            $table->enum('u_role', ['admin', 'supplier'])->default('supplier')->index();
-            $table->tinyInteger('u_status')->default(1)->index();
-            $table->foreignId('u_created_by')->nullable()->index();
-            $table->foreignId('u_updated_by')->nullable()->index();
+            $table->bigIncrements('id');
+            $table->string('code', 20)->unique();
+            $table->string('name', 100);
+            $table->string('email', 100)->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->enum('role', ['admin', 'supplier'])->default('supplier');
+            $table->tinyInteger('status')->default(1);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            // Add indexes if needed
+            $table->index('role');
+            $table->index('status');
+            $table->index('created_by');
+            $table->index('updated_by');
         });
     }
 

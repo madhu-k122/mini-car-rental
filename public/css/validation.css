@@ -1,0 +1,13 @@
+/* public/css/validation.css */
+
+label.text-danger {
+    color: red;            /* Red text for errors */
+    font-size: 0.875rem;   /* Slightly smaller font */
+    margin-top: 0.25rem;   /* Space above the message */
+    display: block;
+}
+
+input.error, select.error, textarea.error {
+    border-color: red;     /* Optional: highlight input border */
+    background-color: #ffe6e6; /* Optional: light red background */
+}

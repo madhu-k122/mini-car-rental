@@ -20,21 +20,30 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $request->session()->regenerate();
-        if (Auth::check()) {
-            $user = Auth::user();
-            if ($user->status !== 'active') {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-                return redirect()->route('login')->withErrors([
-                    'email' => 'Your account is not active.',
-                ]);
-            }
-            return redirect()->intended(route('dashboard', absolute: false));
+
+        if (!Auth::check()) {
+            return redirect()->route('login')->withErrors([
+                'email' => 'Authentication failed.',
+            ]);
         }
-        return redirect()->route('login')->withErrors([
-            'email' => 'Authentication failed.',
-        ]);
+
+        $user = Auth::user();
+
+        if ($user->status !== 1) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->withErrors([
+                'email' => 'Your account is not active.',
+            ]);
+        }
+
+        return match ($user->role) {
+            'admin' => redirect()->route('admin.dashboard'),
+            'supplier' => redirect()->route('supplier.dashboard'),
+            default => redirect('/'),
+        };
     }
 
     public function destroy(Request $request): RedirectResponse

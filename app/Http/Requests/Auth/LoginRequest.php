@@ -19,33 +19,33 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'u_email' => ['required', 'string', 'email','valid_email'],
-            'u_password' => ['required', 'string'],
+            'email' => ['required', 'string', 'email','valid_email'],
+            'password' => ['required', 'string'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'u_email.required' => 'Email field is required.',
-            'u_email.email' => 'Please enter a valid email address.',
-            'u_email.valid_email' => 'The email address is not acceptable.',
-            'u_password.required' => 'Password is required.',
-            'u_password.string' => 'Password must be text.',
+            'email.required' => 'Email field is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.valid_email' => 'The email address is not acceptable.',
+            'password.required' => 'Password is required.',
+            'password.string' => 'Password must be text.',
         ];
     }
 
 
-    public function authenticate(): void
+    public function authenticate()
     {
-        $this->ensureIsNotRateLimited();
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+        if (! Auth::attempt([
+            'email' => $this->input('email'),
+            'password' => $this->input('password')
+        ], $this->boolean('remember'))) {
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => __('auth.failed'),
             ]);
         }
-        RateLimiter::clear($this->throttleKey());
     }
 
     public function ensureIsNotRateLimited(): void
