@@ -10,13 +10,14 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->bigIncrements('b_id');
+            $table->string('b_code', 20)->unique()->index();
             $table->unsignedBigInteger('b_car_id');
             $table->unsignedBigInteger('b_user_id');
             $table->date('b_start_date');
             $table->date('b_end_date');
             $table->enum('b_status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->timestamps(); // b_created_at and b_updated_at handled by default
-            $table->softDeletes(); // b_deleted_at
+            $table->timestamps();
+            $table->softDeletes();
 
             $table->index('b_car_id');
             $table->index('b_user_id');

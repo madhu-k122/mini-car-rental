@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SupplierCarRequest;
 use App\Models\Car;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
@@ -23,11 +24,15 @@ class CarController extends Controller
     public function store(SupplierCarRequest $request)
     {
         $data = $request->validated();
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('cars', 'public');
+        if ($request->hasFile('c_image')) {
+            if (!Storage::disk('public')->exists('cars')) {
+                Storage::disk('public')->makeDirectory('cars');
+            }
+            $data['c_image'] = $request->file('c_image')->store('cars', 'public');
         }
-        $data['user_id'] = Auth::id();
-        $data['available'] = true; // default availability
+        $data['c_code'] = generateRandomStringCode(20);
+        $data['c_user_id'] = Auth::id();
+        $data['c_status'] = 1;
         Car::create($data);
         return redirect()->route('supplier.cars.index')->with('success', 'Car submitted successfully.');
     }
@@ -35,20 +40,17 @@ class CarController extends Controller
     public function edit(Car $car)
     {
         $this->authorizeCar($car);
-        return view('supplier.cars.edit', compact('car'));
+        return view('supplier.cars.create', compact('car'));
     }
 
     public function update(SupplierCarRequest $request, Car $car)
     {
         $this->authorizeCar($car);
-
         $data = $request->validated();
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('cars', 'public');
         }
-
         $car->update($data);
-
         return redirect()->route('supplier.cars.index')->with('success', 'Car updated successfully.');
     }
 
@@ -56,13 +58,27 @@ class CarController extends Controller
     {
         $this->authorizeCar($car);
         $car->delete();
-        return redirect()->route('supplier.cars.index')->with('success', 'Car deleted successfully.');
+        return response()->json(['message' => 'Car deleted successfully.']);
     }
 
     protected function authorizeCar(Car $car)
     {
-        if ($car->user_id !== Auth::id()) {
+        if ($car->c_user_id !== Auth::id()) {
             abort(403, 'Unauthorized access.');
         }
+    }
+
+    public function getAllCars()
+    {
+        return response()->json(Car::all());
+    }
+
+    public function getSingleCar($id)
+    {
+        $car = Car::with('bookings')->find($id);
+        if (!$car) {
+            return response()->json(['message' => 'Car not found'], 404);
+        }
+        return response()->json($car);
     }
 }

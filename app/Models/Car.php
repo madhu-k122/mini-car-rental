@@ -23,20 +23,24 @@ class Car extends Model
         'c_updated_by'
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'c_code';
+    }
 
     public function supplier()
     {
-        return $this->belongsTo(User::class, 'c_user_id');
+        return $this->belongsTo(User::class, 'c_user_id'); // supplier
     }
 
     public function bookings()
     {
-        return $this->hasMany(Booking::class);
+        return $this->hasMany(Booking::class, 'b_car_id');
     }
 
     public function availabilities()
     {
-        return $this->hasMany(CarAvailability::class);
+        return $this->hasMany(CarAvailability::class, 'a_car_id');
     }
 
     public function user()

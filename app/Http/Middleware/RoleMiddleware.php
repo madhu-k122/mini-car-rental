@@ -13,11 +13,8 @@ class RoleMiddleware
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-
         $user = Auth::user();
-
         if (!in_array($user->role, $roles)) {
-            // Log unauthorized attempt
             Log::warning('Unauthorized role access attempt.', [
                 'user_id' => $user->id,
                 'user_name' => $user->name,
@@ -26,10 +23,8 @@ class RoleMiddleware
                 'url' => $request->fullUrl(),
                 'ip' => $request->ip(),
             ]);
-
             abort(403, 'Unauthorized access.');
         }
-
         return $next($request);
     }
 }

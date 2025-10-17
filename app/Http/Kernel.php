@@ -22,7 +22,7 @@ class Kernel extends HttpKernel
 
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
-        'role' => \App\Http\Middleware\RoleMiddleware::class, // <-- this must match your route
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,

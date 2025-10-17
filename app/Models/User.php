@@ -28,6 +28,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'status' => 'integer',
     ];
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+    public function isSupplier(): bool
+    {
+        return $this->role === 'supplier';
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
     public function cars()
     {
         return $this->hasMany(Car::class, 'c_user_id');
@@ -35,6 +50,6 @@ class User extends Authenticatable
 
     public function bookingsAsSupplier()
     {
-        return $this->hasMany(Booking::class, 'user_id');
+        return $this->hasMany(Booking::class, 'b_user_id');
     }
 }
