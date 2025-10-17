@@ -4,9 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCarRequest;
+use App\Http\Requests\SupplierCarRequest;
 use App\Models\Car;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CarApprovalStatusMail;
+use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
@@ -35,7 +40,7 @@ class CarController extends Controller
             'c_price_per_day' => $request->c_price_per_day,
             'c_is_approved' => $request->c_is_approved,
             'status' => $request->c_status,
-            'c_created_by'=>Auth::id(),
+            'c_created_by' => Auth::id(),
             'created_at' => now(),
         ]);
         if ($request->hasFile('c_image')) {
@@ -78,5 +83,29 @@ class CarController extends Controller
     {
         $car->delete();
         return response()->json(['message' => 'Car deleted successfully.']);
+    }
+
+    public function updateApproval(Request $request)
+    {
+        $car = Car::where('c_code', $request->c_code)->with('supplier')->first();
+        if (!$car) {
+            return response()->json(['message' => 'Car not found'], 404);
+        }
+        $car->c_is_approved = $request->c_is_approved;
+        $car->save();
+
+        $statusText = $car->c_is_approved ? 'approved' : 'disapproved';
+
+        try {
+            if ($car->supplier && $car->supplier->email) {
+                Mail::to($car->supplier->email)->send(new CarApprovalStatusMail($car, $statusText));
+            }
+            return response()->json(['message' => "Car approval status updated and email sent."]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => "Status updated, but email could not be sent.",
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

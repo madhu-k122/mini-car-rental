@@ -13,7 +13,7 @@
         <table class="min-w-full bg-white rounded shadow overflow-hidden datatable">
             <thead class="bg-gray-200">
                 <tr>
-                    <th class="px-4 py-2">Name</th>
+                    <th class="px-4 py-2">Car Name</th>
                     <th class="px-4 py-2">Supplier</th>
                     <th class="px-4 py-2">Price/Day</th>
                     <th class="px-4 py-2">Approved</th>
@@ -27,7 +27,12 @@
                     <td class="px-4 py-2">{{ $car->c_name }}</td>
                     <td class="px-4 py-2">{{ $car->supplier?->name ?? 'N/A' }}</td>
                     <td class="px-4 py-2">{{ $car->c_price_per_day }}</td>
-                    <td class="px-4 py-2">{{ $car->c_is_approved ? 'Yes' : 'No' }}</td>
+                    <td>
+                        <select class="approve-status border px-2 py-1 rounded" data-id="{{ $car->c_code }}">
+                            <option value="1" {{ $car->c_is_approved ? 'selected' : '' }}>Yes</option>
+                            <option value="0" {{ !$car->c_is_approved ? 'selected' : '' }}>No</option>
+                        </select>
+                    </td>
                     <td>
                         @if($car->c_status)
                         <span class="px-2 py-1 bg-green-200 text-green-800 rounded text-xs">Active</span>

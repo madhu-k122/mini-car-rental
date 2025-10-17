@@ -26,7 +26,6 @@ class Booking extends Model
         return $this->belongsTo(User::class, 'b_user_id');
     }
 
-    // The supplier (owner of the car)
     public function supplier()
     {
        return $this->belongsTo(User::class, 'b_user_id');

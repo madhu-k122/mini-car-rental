@@ -30,7 +30,7 @@ class Car extends Model
 
     public function supplier()
     {
-        return $this->belongsTo(User::class, 'c_user_id'); // supplier
+        return $this->belongsTo(User::class, 'c_user_id');
     }
 
     public function bookings()
@@ -47,4 +47,10 @@ class Car extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getallbookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+    
 }

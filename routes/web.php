@@ -23,6 +23,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', RoleMiddleware::clas
     Route::resource('cars', AdminCar::class)->parameters(['cars' => 'car:c_code']);
     Route::get('/bookings', [AdminBooking::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{b_code}', [AdminBooking::class, 'show'])->name('bookings.show');
+    Route::post('/cars/update-approval', [AdminCar::class, 'updateApproval'])->name('cars.update-approval');
 });
 
 Route::prefix('supplier')->name('supplier.')->middleware(['auth', RoleMiddleware::class . ':supplier'])->group(function () {
