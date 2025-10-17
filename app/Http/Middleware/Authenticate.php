@@ -6,9 +6,6 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
 {
-    /**
-     * Redirect unauthenticated users to login.
-     */
     protected function redirectTo($request): ?string
     {
         if (!$request->expectsJson()) {

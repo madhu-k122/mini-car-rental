@@ -1,13 +1,4 @@
 $(document).ready(function () {
-    // $('#carsTable').DataTable({
-    //     responsive: true,
-    //     pageLength: 10,
-    //     language: {
-    //         search: "_INPUT_",
-    //         searchPlaceholder: "Search cars..."
-    //     }
-    // });
-
     $('.delete-btn').click(function (e) {
         e.preventDefault();
         let carId = $(this).data('id');
