@@ -22,7 +22,7 @@
                 placeholder="you@example.com"
                 required
                 value="{{ old('email') }}"
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                class="common-input-field"
             />
             <p id="emailError" class="mt-1 text-red-600 text-sm hidden"></p>
         </div>
@@ -35,7 +35,7 @@
                 name="password"
                 placeholder="••••••••"
                 required
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+                class="common-input-field"
             />
             <p id="passwordError" class="mt-1 text-red-600 text-sm hidden"></p>
         </div>

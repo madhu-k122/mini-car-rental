@@ -1,5 +1,4 @@
 <?php
-
 if (!function_exists('generateRandomStringCode')) {
     function generateRandomStringCode(int $length = 20): string
     {

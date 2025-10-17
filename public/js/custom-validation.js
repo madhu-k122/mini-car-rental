@@ -18,18 +18,35 @@ $(function () {
         $('.validate_form').each(function () {
             let $form = $(this);
             $form.validate({
-                errorClass: 'text-danger',
+                errorClass: 'text-red-500 text-sm mt-1',
                 errorPlacement: function (error, element) {
                     error.insertAfter(element);
                 },
                 highlight: function (element) {
-                    $(element).addClass('is-invalid');
+                    $(element).addClass('border-red-500');
                 },
                 unhighlight: function (element) {
-                    $(element).removeClass('is-invalid');
+                    $(element).removeClass('border-red-500');
                 }
             });
         });
     }
     initializeValidation();
+
+    $('.datatable').each(function() {
+        $(this).DataTable({
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            lengthChange: true,
+            pageLength: 10,
+            columnDefs: [{
+                orderable: false,
+                targets: $(this).data('no-sort') ? $(this).data('no-sort').split(',').map(Number) : []
+            }],
+            responsive: true
+        });
+    });
+
 });

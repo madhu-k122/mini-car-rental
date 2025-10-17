@@ -35,7 +35,6 @@ class RegisterUserRequest extends FormRequest
             'password.required'    => 'Password is required.',
             'password.password' => 'Password must be at least 8 characters long, contain uppercase and lowercase letters,       numbers, and special characters.',
             'role.required' => 'Please select a role.',
-            'role.required'        => 'Please select a role.',
             'role.in'              => 'The selected role is invalid.',
         ];
     }

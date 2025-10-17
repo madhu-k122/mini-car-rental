@@ -27,6 +27,14 @@ class AppServiceProvider extends ServiceProvider
             return preg_match('/^[a-zA-Z0-9]*$/',$value);
         });
 
+        Validator::extend('alpha_num_space_dash', function ($attribute, $value) {
+            return preg_match('/^[A-Za-z0-9\s\-]+$/', $value);
+        }, 'The :attribute may only contain letters, numbers, spaces, and hyphens.');
+
+        Validator::extend('alpha_space', function ($attribute, $value) {
+            return preg_match('/^[A-Za-z\s]+$/', $value);
+        }, 'The :attribute may only contain letters and spaces.');
+
         Validator::extend('valid_email', function ($attribute, $value, $parameters, $validator) {
             if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                 return false;

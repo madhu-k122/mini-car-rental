@@ -23,7 +23,7 @@
                 placeholder="John Doe"
                 required
                 maxlength="100"
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" allow_characters="a-zA-Z " data-msg-allowcharacters="Only letters and spaces are allowed."/>
+                class="common-input-field" allow_characters="a-zA-Z " data-msg-allowcharacters="Only letters and spaces are allowed."/>
         </div>
         <div>
             <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
@@ -35,7 +35,7 @@
                 placeholder="you@example.com"
                 required
                 maxlength="100"
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                class="common-input-field" />
         </div>
         <div>
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
@@ -46,7 +46,7 @@
                 placeholder="••••••••"
                 required
                 maxlength="191"
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                class="common-input-field" />
         </div>
 
         <div>
@@ -55,7 +55,7 @@
                 id="role"
                 name="role"
                 required
-                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                class="common-input-field">
                 <option value="" disabled {{ old('role') ? '' : 'selected' }}>-- Choose Role --</option>
                 <option value="supplier" {{ old('role') == 'supplier' ? 'selected' : '' }}>Supplier</option>
                 <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
