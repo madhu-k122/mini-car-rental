@@ -1,0 +1,239 @@
+{
+	"info": {
+		"_postman_id": "7a7b57eb-01ba-4ed0-8604-83be00a1f533",
+		"name": "Customer API",
+		"description": "Customer APIs: Register, Login, Logout, Car list/details, Bookings",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30868375"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/customer/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"secret123\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/customer/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/customer/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Cars",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/customer/cars",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Car Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/customer/cars/{{c_code}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"cars",
+						"{{c_code}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Bookings",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/api/customer/bookings",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"bookings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Booking",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"b_car_id\": 1,\n  \"b_start_date\": \"2025-10-20\",\n  \"b_end_date\": \"2025-10-22\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/customer/bookings",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"customer",
+						"bookings"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "c_code",
+			"value": "",
+			"disabled": true
+		}
+	]
+}
