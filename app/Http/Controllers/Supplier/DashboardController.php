@@ -7,18 +7,7 @@ use App\Models\Car;
 use App\Models\Booking;
 
 class DashboardController extends Controller
-{
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
-            if (auth()->user()->role !== 'supplier') {
-                abort(403, 'Unauthorized');
-            }
-            return $next($request);
-        });
-    }
-    
+{   
     public function index()
     {
         $user = auth()->user();
