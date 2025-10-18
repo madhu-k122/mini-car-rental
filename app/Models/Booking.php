@@ -13,6 +13,8 @@ class Booking extends Model
         'b_end_date',
         'b_total_price',
         'b_status',
+        'b_from_location',
+        'b_to_location',
         'b_code'
     ];
 

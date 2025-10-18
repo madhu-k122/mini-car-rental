@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory,Notifiable, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -51,5 +53,10 @@ class User extends Authenticatable
     public function bookingsAsSupplier()
     {
         return $this->hasMany(Booking::class, 'b_user_id');
+    }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'b_user_id', 'id');
     }
 }

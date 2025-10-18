@@ -30,10 +30,10 @@ Route::prefix('supplier')->name('supplier.')->middleware(['auth', RoleMiddleware
     Route::get('dashboard', [SupplierDashboard::class, 'index'])->name('dashboard');
     Route::get('cars/bookings', [SupplierBooking::class, 'index'])->name('cars.bookings');
     Route::get('cars/availabilities/list', [SupplierCarAvailability::class, 'listAvailability'])->name('cars.availability.list');
-    Route::get('cars/{car:c_code}/availability', [SupplierCarAvailability::class, 'showAvailability'])->name('cars.availability.show');
-    Route::post('cars/{car:c_code}/availability', [SupplierCarAvailability::class, 'storeAvailability'])->name('cars.availability.store');
-    Route::delete('cars/{car:c_code}/availability/{availability}', [SupplierCarAvailability::class, 'deleteAvailability'])->name('cars.availability.delete');
-    Route::get('cars/{car:c_code}/availability/calendar', [SupplierCarAvailability::class, 'calendar'])->name('cars.availability.calendar');
+    Route::get('cars/{c_code}/availability', [SupplierCarAvailability::class, 'getAvailability'])->name('cars.availability.calendar');
+    Route::post('cars/{c_code}/availability', [SupplierCarAvailability::class, 'updateAvailability'])->name('cars.availability.update');
+    Route::get('car-availabilities', [SupplierCarAvailability::class, 'index'])->name('car-availabilities');
+    Route::patch('car-availabilities/{c_code}/update-available', [SupplierCarAvailability::class, 'updateAvailableStatus'])->name('update-car-availabilitie');
     Route::resource('cars', SupplierCar::class)->parameters(['cars' => 'car:c_code']);
 });
 

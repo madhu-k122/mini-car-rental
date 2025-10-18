@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Supplier;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SupplierCarRequest;
 use App\Models\Car;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,10 +26,11 @@ class CarController extends Controller
     {
         $data = $request->validated();
         if ($request->hasFile('c_image')) {
-            if (!Storage::disk('public')->exists('cars')) {
-                Storage::disk('public')->makeDirectory('cars');
-            }
-            $data['c_image'] = $request->file('c_image')->store('cars', 'public');
+            $file = $request->file('c_image');
+            $originalName = $file->getClientOriginalName();
+            $filename = time() . '_' . preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $originalName);
+            $path = $file->storeAs('cars', $filename, 'public');
+            $data['c_image'] = $path;
         }
         $data['c_code'] = generateRandomStringCode(20);
         $data['c_user_id'] = Auth::id();
@@ -47,8 +49,15 @@ class CarController extends Controller
     {
         $this->authorizeCar($car);
         $data = $request->validated();
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('cars', 'public');
+        if ($request->hasFile('c_image')) {
+            $file = $request->file('c_image');
+            if ($car->c_image && Storage::disk('public')->exists($car->c_image)) {
+                Storage::disk('public')->delete($car->c_image);
+            }
+            $originalName = $file->getClientOriginalName();
+            $filename = time() . '_' . preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $originalName);
+            $path = $file->storeAs('cars', $filename, 'public');
+            $data['c_image'] = $path;
         }
         $car->update($data);
         return redirect()->route('supplier.cars.index')->with('success', 'Car updated successfully.');

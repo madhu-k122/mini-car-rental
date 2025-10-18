@@ -22,11 +22,10 @@ class DashboardController extends Controller
     public function index()
     {
         $user = auth()->user();
-
         return view('supplier.dashboard', [
             'myCars' => Car::where('c_user_id', $user->id)->count(),
-            'myBookings' => Booking::whereHas('car', function($q) use ($user) {
-                $q->where('b_user_id', $user->id);
+            'myBookings' => Booking::whereHas('car', function ($query) use ($user) {
+                $query->where('c_user_id', $user->id);
             })->count(),
         ]);
     }

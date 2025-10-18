@@ -39,11 +39,12 @@ $(document).ready(function () {
         var html = `
             <p><strong>Car:</strong> ${booking.car?.c_name ?? 'N/A'}</p>
             <p><strong>Customer:</strong> ${booking.user?.name ?? 'N/A'}</p>
+            <p><strong>From:</strong> ${booking.b_from_location ?? 'N/A'}</p>
+            <p><strong>To:</strong> ${booking.b_to_location ?? 'N/A'}</p>
             <p><strong>Start Date:</strong> ${booking.b_start_date}</p>
             <p><strong>End Date:</strong> ${booking.b_end_date}</p>
             <p><strong>Total Price:</strong> ₹${parseFloat(booking.car.c_price_per_day).toFixed(2)}</p>
-            <p><strong>Status:</strong> ${booking.b_status}</p>
-        `;
+            <p><strong>Status:</strong> ${booking.b_status}</p>`;
         $('#bookingDetails').html(html);
         $('#bookingModal').removeClass('hidden');
     });
@@ -74,7 +75,6 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    // url: "{{ route('admin.cars.update-approval') }}",
                     url: `cars/update-approval`,
                     type: 'POST',
                     data: {
@@ -85,13 +85,9 @@ $(document).ready(function () {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (res) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Updated!',
-                            text: res.message,
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
+                        if (res.status == true) {
+                            Swal.fire('Success', 'Status updated successfully and email successfully', 'success');
+                        }
                     },
                     error: function (xhr) {
                         Swal.fire({
@@ -103,7 +99,6 @@ $(document).ready(function () {
                     }
                 });
             } else {
-            // Revert selection if canceled
             $(this).val($(this).find('option[selected]').val());
         }
     });

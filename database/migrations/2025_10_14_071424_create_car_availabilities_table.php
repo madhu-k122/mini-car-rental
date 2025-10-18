@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('a_code', 20)->unique()->index();
             $table->foreignId('a_car_id')->constrained('cars')->onDelete('cascade')->index();
-            $table->date('a_date')->index();
+            // $table->date('a_date')->index();
+            $table->date('a_from_date');
+            $table->date('a_to_date');
             $table->boolean('a_is_available')->default(true)->index();
             $table->tinyInteger('a_status')->default(1)->index();
             $table->foreignId('a_created_by')->nullable()->index();

@@ -41,24 +41,24 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('supplier.cars.index') }}" class="block px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('supplier.cars.*') ? 'bg-gray-200 font-bold' : '' }}">
+                <a href="{{ route('supplier.cars.index') }}"
+                    class="block px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('supplier.cars.index') ? 'bg-gray-200 font-bold' : '' }}">
                     My Cars
                 </a>
             </li>
             <li>
-                <a href="{{ route('supplier.cars.bookings') }}" class="block px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('supplier.cars.bookings') ? 'bg-gray-200 font-bold' : '' }}">
+                <a href="{{ route('supplier.cars.bookings') }}"
+                    class="block px-4 py-2 rounded hover:bg-gray-200 {{ request()->routeIs('supplier.cars.bookings') ? 'bg-gray-200 font-bold' : '' }}">
                     My Bookings
                 </a>
             </li>
 
             <li>
-                <a href="{{ route('supplier.cars.availability.calendar', $car->c_code ?? '#') }}"
-                    class="block py-2 px-4 rounded hover:bg-gray-200 {{ request()->routeIs('supplier.cars.availability.*') ? 'bg-gray-200 font-bold' : '' }}">
-                    Availability Calendar
+                <a href="{{ route('supplier.car-availabilities') }}"
+                    class="block py-2 px-4 rounded hover:bg-gray-200 {{ request()->routeIs('supplier.car-availabilities') ? 'bg-gray-200 font-bold' : '' }}">
+                    Car Availabilities List
                 </a>
             </li>
-
-
             @endif
         </ul>
     </nav>

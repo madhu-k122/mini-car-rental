@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AdminCarRequest;
-use App\Http\Requests\SupplierCarRequest;
 use App\Models\Car;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CarApprovalStatusMail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CarController extends Controller
 {
@@ -31,7 +31,7 @@ class CarController extends Controller
     public function store(AdminCarRequest $request)
     {
         $code = generateRandomStringCode(20);
-        $car = Car::create([
+        $data = [
             'c_code' => $code,
             'c_user_id' => $request->c_user_id,
             'c_name' => $request->c_name,
@@ -42,14 +42,18 @@ class CarController extends Controller
             'status' => $request->c_status,
             'c_created_by' => Auth::id(),
             'created_at' => now(),
-        ]);
+        ];
+
         if ($request->hasFile('c_image')) {
-            $car->c_image = $request->file('c_image')->store('cars', 'public');
-            $car->save();
+            $file = $request->file('c_image');
+            $originalName = $file->getClientOriginalName();
+            $filename = time() . '_' . preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $originalName);
+            $path = $file->storeAs('cars', $filename, 'public');
+            $data['c_image'] = $path;
         }
+        Car::create($data);
         return redirect()->route('admin.cars.index')->with('success', 'Car added successfully.');
     }
-
 
     public function edit(Car $car)
     {
@@ -73,7 +77,14 @@ class CarController extends Controller
             'updated_at' => now(),
         ];
         if ($request->hasFile('c_image')) {
-            $data['c_image'] = $request->file('c_image')->store('cars', 'public');
+            $file = $request->file('c_image');
+            if ($car->c_image && Storage::disk('public')->exists($car->c_image)) {
+                Storage::disk('public')->delete($car->c_image);
+            }
+            $originalName = $file->getClientOriginalName();
+            $filename = time() . '_' . preg_replace('/[^A-Za-z0-9_\-\.]/', '_', $originalName);
+            $path = $file->storeAs('cars', $filename, 'public');
+            $data['c_image'] = $path;
         }
         $car->update($data);
         return redirect()->route('admin.cars.index')->with('success', 'Car updated.');
@@ -82,27 +93,26 @@ class CarController extends Controller
     public function destroy(Car $car)
     {
         $car->delete();
-        return response()->json(['message' => 'Car deleted successfully.']);
+        return response()->json(['status'=>true,'message' => 'Car deleted successfully.']);
     }
 
     public function updateApproval(Request $request)
     {
         $car = Car::where('c_code', $request->c_code)->with('supplier')->first();
         if (!$car) {
-            return response()->json(['message' => 'Car not found'], 404);
+            return response()->json(['status'=>false,'message' => 'Car not found'], 404);
         }
         $car->c_is_approved = $request->c_is_approved;
         $car->save();
-
         $statusText = $car->c_is_approved ? 'approved' : 'disapproved';
-
         try {
             if ($car->supplier && $car->supplier->email) {
                 Mail::to($car->supplier->email)->send(new CarApprovalStatusMail($car, $statusText));
             }
-            return response()->json(['message' => "Car approval status updated and email sent."]);
+            return response()->json(['status'=>true,'message' => "Car approval status updated and email sent successfully."]);
         } catch (\Exception $e) {
             return response()->json([
+                'status'=>false,
                 'message' => "Status updated, but email could not be sent.",
                 'error' => $e->getMessage(),
             ], 500);

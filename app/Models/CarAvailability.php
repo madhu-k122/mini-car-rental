@@ -17,7 +17,8 @@ class CarAvailability extends Model
     protected $fillable = [
         'a_code',
         'a_car_id',
-        'a_date',
+        'a_from_date',
+        'a_to_date',
         'a_is_available',
         'a_status',
         'a_created_by',
