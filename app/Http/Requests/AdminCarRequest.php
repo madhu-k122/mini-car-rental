@@ -19,7 +19,6 @@ class AdminCarRequest extends FormRequest
             'c_type' => 'required|string|max:100|alpha_space',
             'c_location' => 'required|string|max:255|regex:/^[A-Za-z0-9\s,.\-]+$/',
             'c_price_per_day' => 'required|numeric|min:100|max:100000',
-            'c_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'c_status' => ['required', Rule::in(['1', '0'])],
         ];
         if ($this->isMethod('post')) {
@@ -44,9 +43,6 @@ class AdminCarRequest extends FormRequest
             'c_price_per_day.numeric' => 'Price per day must be a number.',
             'c_price_per_day.min' => 'Price per day must be at least 100.',
             'c_price_per_day.max' => 'Price per day cannot exceed 100,000.',
-            'c_image.image' => 'Uploaded file must be an image.',
-            'c_image.mimes' => 'Image must be a file of type: jpg, jpeg, png.',
-            'c_image.max' => 'Image size should not exceed 2MB.',
             'c_status.required' => 'Please select the car status.',
             'c_status.in' => 'Car status must be either active or inactive.',
         ];

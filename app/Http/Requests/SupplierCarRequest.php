@@ -20,7 +20,6 @@ class SupplierCarRequest extends FormRequest
             'c_type' => 'required|string|max:100|alpha_space',
             'c_location' => 'required|string|max:255|regex:/^[A-Za-z0-9\s,.\-]+$/',
             'c_price_per_day' => 'required|numeric|min:100|max:100000',
-            'c_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'c_status'     => ['required', Rule::in(['1', '0'])],
         ];
     }
@@ -41,9 +40,6 @@ class SupplierCarRequest extends FormRequest
             'c_price_per_day.numeric' => 'Price per day must be a valid number.',
             'c_price_per_day.min' => 'Price per day must be at least ₹100.',
             'c_price_per_day.max' => 'Price per day cannot exceed ₹100,000.',
-            'c_image.image' => 'Uploaded file must be an image.',
-            'c_image.mimes' => 'Image must be a JPG or PNG file.',
-            'c_image.max' => 'Image size must not exceed 2MB.',
             'c_status.required'        => 'Please select a status.',
             'c_status.in'              => 'The selected status is invalid.',
         ];

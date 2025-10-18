@@ -26,6 +26,7 @@ class SupplierController extends Controller
         $data['role'] = 'supplier';
         $data['password'] = bcrypt($data['password']);
         $data['created_by'] = auth()->id();
+        $data['created_at'] = date('Y-m-d H:i:s');
         User::create($data);
         return redirect()->route('admin.suppliers.index')->with('success', 'Supplier added.');
     }
@@ -44,6 +45,7 @@ class SupplierController extends Controller
             unset($data['password']);
         }
         $data['updated_by'] = auth()->id();
+        $data['updated_on'] = date('Y-m-d H:i:s');
         $supplier->update($data);
         return redirect()->route('admin.suppliers.index')->with('success', 'Supplier updated.');
     }

@@ -26,13 +26,11 @@
             <div>
                 <label class="block mb-1 font-medium">Name</label>
                 <input type="text" name="c_name" value="{{ old('c_name', $car->c_name ?? '') }}" class="border p-2 w-full rounded" required>
-                @error('c_name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block mb-1 font-medium">Type</label>
                 <input type="text" name="c_type" value="{{ old('c_type', $car->c_type ?? '') }}" class="border p-2 w-full rounded" required>
-                @error('c_type') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
         </div>
 
@@ -40,12 +38,10 @@
             <div>
                 <label class="block mb-1 font-medium">Location</label>
                 <input type="text" name="c_location" value="{{ old('c_location', $car->c_location ?? '') }}" class="border p-2 w-full rounded" required>
-                @error('c_location') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
             <div>
                 <label class="block mb-1 font-medium">Price per Day</label>
                 <input type="number" step="0.01" name="c_price_per_day" value="{{ old('c_price_per_day', $car->c_price_per_day ?? '') }}" class="border p-2 w-full rounded" required>
-                @error('c_price_per_day') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div>
@@ -54,7 +50,6 @@
                     <option value="0" {{ (old('c_is_approved', $car->c_is_approved ?? 0) == 0) ? 'selected' : '' }}>No</option>
                     <option value="1" {{ (old('c_is_approved', $car->c_is_approved ?? 0) == 1) ? 'selected' : '' }}>Yes</option>
                 </select>
-                @error('c_is_approved') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
         </div>
 
@@ -65,16 +60,14 @@
                     <option value="1" {{ (old('c_status', $car->c_status ?? 1) == 1) ? 'selected' : '' }}>Active</option>
                     <option value="0" {{ (old('c_status', $car->c_status ?? 1) == 0) ? 'selected' : '' }}>Inactive</option>
                 </select>
-                @error('c_status') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div>
                 <label class="block mb-1 font-medium">Car Image</label>
                 <input type="file" name="c_image" class="border p-2 w-full rounded">
                 @if(isset($car) && $car->c_image)
-                <img src="{{ asset('storage/' . $car->c_image) }}" alt="Car Image" class="mt-2 w-32 h-20 object-cover">
+                <img src="{{ asset('storage/'.$car->c_image) }}" class="mt-3 w-24 h-24 object-cover rounded">
                 @endif
-                @error('c_image') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
         </div>
 

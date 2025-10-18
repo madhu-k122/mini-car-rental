@@ -16,7 +16,7 @@
     @include('layouts.navigation')
     <div class="flex-1 flex flex-col">
         <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-semibold">@yield('page-title', 'Dashboard')</h1>
+            <h1 class="text-xl font-semibold"></h1>
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="focus:outline-none flex items-center space-x-2">
                     <div class="w-9 h-9 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 font-bold">

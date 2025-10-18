@@ -1,6 +1,6 @@
 @extends('layouts.app')
-
-@section('content')
+@section('title', 'My Bookings')
+@section('page-title', 'My Bookings')@section('content')
 <div class="max-w-10xl mx-auto px-4 py-6">
     <div class="card w-full">
         <h2 class="text-2xl font-bold mb-6 text-gray-800">
@@ -47,11 +47,8 @@
                     <label class="block font-medium text-gray-700 mb-1">Image</label>
                     <input type="file" name="c_image" class="input-field">
                     @if(isset($car) && $car->c_image)
-                    <img src="{{ asset('storage/'.$car->c_image) }}" class="mt-3 w-48 h-32 object-cover rounded">
+                    <img src="{{ asset('storage/'.$car->c_image) }}" class="mt-3 w-24 h-24 object-cover rounded">
                     @endif
-                    @error('c_image')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
                 </div>
 
             </div>
