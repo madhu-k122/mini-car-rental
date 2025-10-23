@@ -13,6 +13,17 @@ use App\Http\Controllers\Supplier\CarController as SupplierCar;
 use App\Http\Controllers\Supplier\SupplierCarAvailabilityController as SupplierCarAvailability;
 use App\Http\Middleware\RoleMiddleware;
 
+use Illuminate\Support\Facades\DB;
+
+Route::get('/db-test', function () {
+    try {
+        $databaseName = DB::connection()->getDatabaseName();
+        return "Connected to database: " . $databaseName;
+    } catch (\Exception $e) {
+        return "Database connection failed: " . $e->getMessage();
+    }
+});
+
 // Login routes
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/', [AuthenticatedSessionController::class, 'store'])->name('login.store');
