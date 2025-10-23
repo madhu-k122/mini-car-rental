@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Go to Laravel project folder
 cd /var/www/html
 
 # 1. Install composer dependencies (production)
@@ -14,12 +15,12 @@ php artisan route:clear
 php artisan cache:clear
 php artisan view:clear
 
-# 4. Rebuild caches
+# 4. Rebuild caches for production
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# 5. Run migrations
+# 5. Run database migrations
 php artisan migrate --force
 
 echo "Laravel build script completed successfully."

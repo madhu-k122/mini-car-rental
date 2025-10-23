@@ -11,17 +11,17 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Copy entire application code first
+# Copy application code
 COPY . /var/www/html/
 
-# Set permissions
+# Set permissions for Laravel folders
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install PHP dependencies AFTER copying code
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
 # Set Apache DocumentRoot to public folder
