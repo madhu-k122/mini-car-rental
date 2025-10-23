@@ -1,8 +1,4 @@
-# --------------------------
-# Laravel Dockerfile for Render
-# --------------------------
-
-# Use official PHP image with Apache
+# Use official PHP 8.2 with Apache
 FROM php:8.2-apache
 
 # Set working directory
@@ -19,31 +15,28 @@ RUN a2enmod rewrite
 # Copy application code
 COPY . /var/www/html/
 
-# Copy environment file (or you can set env vars in Render dashboard)
-# COPY .env /var/www/html/.env
-
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Set correct permissions
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Set Apache DocumentRoot to public folder
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Copy build script and make it executable
+# Copy build script
 COPY build.sh /usr/local/bin/build.sh
 RUN chmod +x /usr/local/bin/build.sh
 
-# Run build script (this handles caching and migrations)
+# Run build script
 RUN /usr/local/bin/build.sh
 
-# Expose Apache port
+# Expose port
 EXPOSE 80
 
-# Start Apache in foreground
+# Start Apache
 CMD ["apache2-foreground"]

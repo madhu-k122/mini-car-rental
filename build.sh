@@ -1,15 +1,13 @@
 #!/bin/bash
+set -e
 
-# Increase memory limit for Composer
-export COMPOSER_MEMORY_LIMIT=-1
+# Ensure .env exists
+if [ ! -f .env ]; then
+    echo ".env file not found! Exiting..."
+    exit 1
+fi
 
-# Clear Composer cache
-composer clear-cache
-
-# Install dependencies
-composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction
-
-# Generate app key if missing
+# Generate app key if not set
 php artisan key:generate --force
 
 # Clear caches
@@ -23,7 +21,8 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Run migrations (if DB is accessible)
-php artisan migrate --force
+# Run migrations only if DB is reachable
+# Uncomment after setting correct DB_HOST and credentials
+# php artisan migrate --force
 
-echo "Laravel build completed successfully."
+echo "Laravel build script completed successfully."

@@ -13,10 +13,12 @@ use App\Http\Controllers\Supplier\CarController as SupplierCar;
 use App\Http\Controllers\Supplier\SupplierCarAvailabilityController as SupplierCarAvailability;
 use App\Http\Middleware\RoleMiddleware;
 
+// Login routes
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::post('/', [AuthenticatedSessionController::class, 'store']);
+Route::post('/', [AuthenticatedSessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
+// Admin routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
     Route::get('/dashboard', [AdminDashboard::class, 'dashboard'])->name('dashboard');
     Route::resource('suppliers', AdminSupplier::class)->parameters(['suppliers' => 'supplier:code']);
@@ -26,6 +28,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', RoleMiddleware::clas
     Route::post('/cars/update-approval', [AdminCar::class, 'updateApproval'])->name('cars.update-approval');
 });
 
+// Supplier routes
 Route::prefix('supplier')->name('supplier.')->middleware(['auth', RoleMiddleware::class . ':supplier'])->group(function () {
     Route::get('dashboard', [SupplierDashboard::class, 'index'])->name('dashboard');
     Route::get('cars/bookings', [SupplierBooking::class, 'index'])->name('cars.bookings');
@@ -37,6 +40,7 @@ Route::prefix('supplier')->name('supplier.')->middleware(['auth', RoleMiddleware
     Route::resource('cars', SupplierCar::class)->parameters(['cars' => 'car:c_code']);
 });
 
+// Profile routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
