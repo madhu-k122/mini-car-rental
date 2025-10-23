@@ -1,28 +1,18 @@
 #!/bin/bash
-
-# Exit on any failure
-set -e
-
 echo "Running Laravel build script..."
 
-# Install composer dependencies
-composer install --no-dev --optimize-autoloader
+# Create .env from example if missing
+if [ ! -f .env ]; then
+    cp .env.example .env
+fi
 
-# Generate app key if not exists
-php artisan key:generate
+# Generate application key
+php artisan key:generate --force
 
-# Clear caches
+# Clear and cache configs
 php artisan config:clear
 php artisan route:clear
-php artisan cache:clear
 php artisan view:clear
+php artisan cache:clear
 
-# Rebuild caches
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Run migrations
-php artisan migrate --force
-
-echo "Laravel build script completed successfully."
+echo "Build finished!"
