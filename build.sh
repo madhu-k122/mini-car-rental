@@ -2,7 +2,7 @@
 
 cd /var/www/html
 
-# 1. Install composer dependencies
+# 1. Install composer dependencies (production)
 composer install --no-dev --optimize-autoloader
 
 # 2. Generate APP_KEY if not set
