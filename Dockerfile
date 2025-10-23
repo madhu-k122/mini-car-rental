@@ -14,11 +14,20 @@ RUN a2enmod rewrite
 # Copy project files
 COPY . /var/www/html
 
+# Copy build script
+COPY build.sh /var/www/html/build.sh
+
+# Make build script executable
+RUN chmod +x /var/www/html/build.sh
+
+# Run build script
+RUN ./build.sh
+
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+# Install PHP dependencies (already done in build.sh if you included it there)
+# RUN composer install --no-dev --optimize-autoloader
 
 # Set permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html \
