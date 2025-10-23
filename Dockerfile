@@ -1,7 +1,6 @@
-# Use official PHP 8.2 with Apache
+# Use official PHP image with Apache
 FROM php:8.2-apache
 
-# Set working directory
 WORKDIR /var/www/html
 
 # Install system dependencies
@@ -35,8 +34,5 @@ RUN chmod +x /usr/local/bin/build.sh
 # Run build script
 RUN /usr/local/bin/build.sh
 
-# Expose port
 EXPOSE 80
-
-# Start Apache
 CMD ["apache2-foreground"]
