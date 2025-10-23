@@ -11,14 +11,8 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Copy entire application code
+# Copy application code
 COPY . /var/www/html/
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
 
 # Set permissions for Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
@@ -27,12 +21,13 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Set Apache DocumentRoot to public folder
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Copy entrypoint script
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Copy build script
+COPY build.sh /usr/local/bin/build.sh
+RUN chmod +x /usr/local/bin/build.sh
 
+# Expose port 80
 EXPOSE 80
 
-# Run entrypoint script on container start
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+# Run build script on container start, then Apache
+ENTRYPOINT ["/usr/local/bin/build.sh"]
 CMD ["apache2-foreground"]
