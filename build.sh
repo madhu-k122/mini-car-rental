@@ -1,28 +1,28 @@
 #!/bin/bash
+
+# Exit on any failure
 set -e
 
-# Ensure .env exists
-if [ ! -f .env ]; then
-    echo ".env file not found! Exiting..."
-    exit 1
-fi
+echo "Running Laravel build script..."
 
-# Generate app key if not set
-php artisan key:generate --force
+# Install composer dependencies
+composer install --no-dev --optimize-autoloader
+
+# Generate app key if not exists
+php artisan key:generate
 
 # Clear caches
 php artisan config:clear
 php artisan route:clear
-php artisan view:clear
 php artisan cache:clear
+php artisan view:clear
 
 # Rebuild caches
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Run migrations only if DB is reachable
-# Uncomment after setting correct DB_HOST and credentials
-# php artisan migrate --force
+# Run migrations
+php artisan migrate --force
 
 echo "Laravel build script completed successfully."
