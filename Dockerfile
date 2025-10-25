@@ -12,16 +12,16 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Copy all project files
+# Copy project files
 COPY . /var/www/html/
 
-# Copy .env explicitly
-COPY .env /var/www/html/.env
+# ⚠️ Do NOT copy your local .env file
+# Render injects environment variables automatically at runtime
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Copy build script
+# Run build script
 COPY build.sh /usr/local/bin/build.sh
 RUN chmod +x /usr/local/bin/build.sh
 RUN /usr/local/bin/build.sh
@@ -29,19 +29,19 @@ RUN /usr/local/bin/build.sh
 # Ensure storage and cache folders exist
 RUN mkdir -p /var/www/html/storage/logs /var/www/html/bootstrap/cache
 
-# Fix permissions
+# Fix permissions for Laravel folders (read/write for Apache)
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Update Apache DocumentRoot to Laravel public folder
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Copy entrypoint script
+# Copy entrypoint to fix permissions at container startup
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 # Expose port 80
 EXPOSE 80
 
-# Use entrypoint to fix permissions at runtime
+# Use entrypoint
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
