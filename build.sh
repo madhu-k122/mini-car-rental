@@ -8,28 +8,23 @@ if [ ! -d "vendor" ]; then
     composer install --no-dev --optimize-autoloader
 fi
 
-# Ensure .env exists
-if [ ! -f .env ]; then
-    cp .env.example .env
+# Generate app key only if not already set
+if ! grep -q "APP_KEY=" .env 2>/dev/null; then
+    php artisan key:generate --force
 fi
 
-# Generate app key
-php artisan key:generate --force
+# Clear caches
+php artisan config:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
+php artisan cache:clear || true
 
-# Clear old caches
-php artisan config:clear
-php artisan route:clear
-php artisan view:clear
-php artisan cache:clear
+# Rebuild caches for production
+php artisan config:cache || true
+php artisan route:cache || true
+php artisan view:cache || true
 
-# Build production caches
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Ensure DB tables exist and run migrations
-php artisan migrate --force
-php artisan session:table --force
-php artisan migrate --force
+# Run database migrations (optional but recommended)
+php artisan migrate --force || true
 
 echo "✅ Laravel build finished!"
