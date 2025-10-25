@@ -8,6 +8,12 @@ if [ ! -d "vendor" ]; then
     composer install --no-dev --optimize-autoloader
 fi
 
+# Create minimal .env if missing (Render injects vars later at runtime)
+if [ ! -f .env ]; then
+    echo "APP_KEY=" > .env
+    echo "APP_ENV=production" >> .env
+fi
+
 # Generate app key only if not already set
 if ! grep -q "APP_KEY=" .env 2>/dev/null; then
     php artisan key:generate --force
